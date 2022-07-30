@@ -12,24 +12,40 @@ let equation = {
     second: null
 }
 
-function calcOperand(operand) {
-    if(first == null) {
-        first = operand;
+function updateOperand(operand) {
+    if(equation.first === null) {
+        equation.first = operand;
+        updateDisplay("first");
     }
-    else if (operator == null) {
-        first = first + operand;
+    else if (operator === null) {
+        equation.first = equation.first + operand;
+        updateDisplay("first");
     } 
-    else if (second == null) {
-        second = operand;
+    else if (equation.second === null) {
+        equation.second = operand;
+        updateDisplay("second");
     }
     else {
-        second = second + operand;
+        equation.second = equation.second + operand;
+        updateDisplay("second");
     }
     
 }
 
-function calcOperator(operator) {
-    
+function updateOperator(operator) {
+    if(equation.first === null) {
+        equation.first = 0;
+        equation.operator = operator;
+    } 
+    else if (operator === null || second === null) {
+        equation.operator = operator;
+    } 
+    else {
+        equation.first = operate(...equation);
+        equation.operator = operator;
+        equation.second = null;
+        updateDisplay("first");
+    }
 }
 
 
