@@ -36,7 +36,7 @@ function updateOperand(operand) {
 
 function updateOperator(operator) {
     if(eq.current === "second") {
-        eq.first = operate(eq);
+        eq.first = operate(eq.first, eq.operator, eq.second);
         eq.second = "0";
     }
     eq.operator = operator;
@@ -46,10 +46,10 @@ function updateOperator(operator) {
 
 function evalEquals() {
     if(eq.current === "second") {
-        eq.first = operate(eq);
+        eq.first = operate(eq.first, eq.operator, eq.second);
     } 
     else if (eq.current === "operator"){
-        eq.first = operate(eq);
+        eq.first = operate(eq.first, eq.operator, eq.first);
     }
     else {
         return;
@@ -60,8 +60,8 @@ function evalEquals() {
     updateDisplay(eq.current);
 }
 
-function operate(eq) {
-    return eq.operator(+(eq.first), +(eq.second));
+function operate(a, operator, b) {
+    return operator(+(a), +(b));
 }
 
 function receiveInput(event) {
@@ -71,8 +71,25 @@ function receiveInput(event) {
         case "add":
             updateOperator(add);
             break;
+        case "subtract":
+            updateOperator(subtract);
+            break;
+        case "divide":
+            updateOperator(divide);
+            break;
+        case "multiply":
+            updateOperator(multiply);
+            break;
+        case "clear":
+            break;
+        case "negate":
+            break;
+        case "percent":
+            break;
         case "equals":
             evalEquals();
+            break;
+        case "decimal":
             break;
         case undefined:
             updateOperand(event.target.innerText);
