@@ -31,13 +31,23 @@ document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("cl
 
 const display = document.querySelector("#display");
 
+function updateDisplayTo(which) {
+    if(which !== "first" || which !== "second") {
+        console.log("INVALID INPUT");
+        return;
+    }
+    display.innerText = data[`${which}Neg`] ? "-" + data[`${which}`] : data[`${which}`];
+}
+
 function operateFromData() {
     let a = firstNeg ? (-1) * +(data.first) : +(data.first);
     let b = secondNeg ? (-1) * +(data.second) : +(data.second);
     console.log(`a: ${a}`);
     console.log(`b: ${b}`);
-    console.log(round(data.operator(a,b), DECIMAL_PLACES));
-    return "" + round(data.operator(a,b), DECIMAL_PLACES);
+    let result = data.operator(a,b);
+    let isNeg = result < 0;
+    if (isNeg) result *= -1;
+    return {neg: isNeg, val: "" + round(result, DECIMAL_PLACES)};
 }
 
 function roundTo(num, places) {
