@@ -34,7 +34,9 @@ const display = document.querySelector("#display");
 function operateFromData() {
     let a = firstNeg ? (-1) * +(data.first) : +(data.first);
     let b = secondNeg ? (-1) * +(data.second) : +(data.second);
-
+    console.log(`a: ${a}`);
+    console.log(`b: ${b}`);
+    console.log(round(data.operator(a,b), DECIMAL_PLACES));
     return "" + round(data.operator(a,b), DECIMAL_PLACES);
 }
 
@@ -222,12 +224,34 @@ function evalEquals() {
 function evalDecimal() {
     switch(data.currentState) {
         case states.FIRST_ZERO:
-        case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
+            data.currentState = states.FIRST_FLOAT;
+            data.first += ".";
+            //update display to data.first
+            break;
+
         case states.SECOND_ZERO:
-        case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
+            data.currentState = states.SECOND_FLOAT;
+            data.second += ".";
+            //update display to data.second
+            break;
+
         case states.OPERATOR:
+            data.currentState = states.SECOND_FLOAT;
+            data.second = "0.";
+            //update display to data.second
+            break;
+
         case states.RESULT:
+            data.currentState = states.FIRST_FLOAT;
+            data.first = "0.";
+            //update display to data.first
+            break;
+
+        case states.FIRST_FLOAT:
+        case states.SECOND_FLOAT:
+            //do nothing
+            break;
     }
 }
