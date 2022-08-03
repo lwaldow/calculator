@@ -31,6 +31,17 @@ document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("cl
 
 const display = document.querySelector("#display");
 
+function operateFromData() {
+    let a = firstNeg ? (-1) * +(data.first) : +(data.first);
+    let b = secondNeg ? (-1) * +(data.second) : +(data.second);
+
+    return "" + round(data.operator(a,b), DECIMAL_PLACES);
+}
+
+function roundTo(num, places) {
+    return Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
+}
+
 function handleInput(event) {
     let input = event.target.dataset.input;
     switch(input) {
