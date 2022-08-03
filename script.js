@@ -150,21 +150,84 @@ function evalOperator(operator) {
 }
 
 function evalClear() {
-
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+        case states.OPERATOR:
+        case states.RESULT:
+    }
 }
 
 function evalNegate() {
-
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+        case states.OPERATOR:
+        case states.RESULT:
+    }
 }
 
 function evalPercent() {
-
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+        case states.OPERATOR:
+        case states.RESULT:
+    }
 }
 
 function evalEquals() {
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+            data.currentState = states.RESULT;
+            break;
 
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+            data.currentState = states.RESULT;
+            data.first = operateFromData();
+            // update display to data.first
+            break;
+
+        case states.OPERATOR:
+            data.currentState = states.RESULT;
+            data.second = data.first;
+            data.first = operateFromData();
+            // toggle off operator button ?
+            //update display to data.first
+            break;
+
+        case states.RESULT:
+            data.first = operateFromData();
+            //update display to data.first
+            break;
+    }
 }
 
 function evalDecimal() {
-
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+        case states.OPERATOR:
+        case states.RESULT:
+    }
 }
