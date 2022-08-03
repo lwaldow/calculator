@@ -19,7 +19,8 @@ const states = {
 }
 
 const data = {
-firstNeg: false,
+    currentState: states.FIRST_ZERO,
+    firstNeg: false,
     first: "0",
     operator: undefined,
     secondNeg: false,
@@ -66,11 +67,49 @@ function handleInput(event) {
     }
 }
 
-function evalOperator(operator) {
+function evalOperand(number) {
+    switch(data.currentState) {
+        case states.FIRST_ZERO:
+            if (number === "0") return;
+            data.first = number;
+            data.currentState = states.FIRST_NONZERO;
+            // update display to data.first
+            break;
+        
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+            data.first += number;
+            //update display to data.first
+            break;
+        
+        case states.OPERATOR:
+            data.second = number;
+            data.currentState = (number === "0") ?  states.SECOND_ZERO : states.SECOND_NONZERO;
+            // update display to data.second
+            break;
+        
+        case states.SECOND_ZERO:
+            if (number === "0") return;
+            data.second = number;
+            data.currentState = states.SECOND_NONZERO;
+            // update display to data.second
+            break;
 
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+            data.first += number;
+            //update display to data.second
+            break;
+
+        case states.RESULT:
+            data.first = number;
+            data.currentState = (number === "0") ?  states.FIRST_ZERO : states.FIRST_NONZERO;
+            // update display to data.first
+            break;
+    }
 }
 
-function evalOperand(number) {
+function evalOperator(operator) {
 
 }
 
@@ -91,5 +130,5 @@ function evalEquals() {
 }
 
 function evalDecimal() {
-    
+
 }
