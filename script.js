@@ -38,16 +38,16 @@ function handleInput(event) {
             evalOperand(event.target.innerText);
             break;
         case "add":
-            evalOperator(add);
+            evalOperator(operators.add);
             break;
         case "subtract":
-            evalOperator(subtract);
+            evalOperator(operators.subtract);
             break;
         case "divide":
-            evalOperator(divide);
+            evalOperator(operators.divide);
             break;
         case "multiply":
-            evalOperator(multiply);
+            evalOperator(operators.multiply);
             break;
         case "clear":
             evalClear();
