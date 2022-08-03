@@ -110,7 +110,32 @@ function evalOperand(number) {
 }
 
 function evalOperator(operator) {
+    switch (data.currentState) {
+        case states.RESULT:
+        case states.FIRST_ZERO:
+        case states.FIRST_FLOAT:
+        case states.FIRST_NONZERO:
+            data.operator = operator;
+            data.currentState = states.OPERATOR;
+            // update operator button to toggle on (maybe do this purely based on clicks and not logically)
+            break;
+        
+        case states.OPERATOR:
+            data.operator = operator;
+            //update prev operator button toggled off, new operator btn toggled on (not here?)
+            break;
 
+        case states.SECOND_ZERO:
+        case states.SECOND_FLOAT:
+        case states.SECOND_NONZERO:
+            data.first = operateFromData();
+            data.second = "0"
+            data.operator = operator;
+            data.currentState = states.OPERATOR;
+            // update display to data.first
+            // update operator btn to toggle on (not here?)
+            break;
+    }
 }
 
 function evalClear() {
