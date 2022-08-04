@@ -32,11 +32,11 @@ document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("cl
 const display = document.querySelector("#display");
 
 function updateDisplayTo(which) {
-    if(which !== "first" || which !== "second") {
+    if(which !== "first" && which !== "second") {
         console.log("INVALID INPUT");
         return;
     }
-    display.innerText = data[`${which}Neg`] ? "-" + data[`${which}`] : data[`${which}`];
+    display.innerText = data[`${which}Neg`] ? "-" + data[which] : data[which];
 }
 
 function updateDataFromOperate(which) {
@@ -55,14 +55,12 @@ function negate(which) {
 }
 
 function operateFromData() {
-    let a = firstNeg ? (-1) * +(data.first) : +(data.first);
-    let b = secondNeg ? (-1) * +(data.second) : +(data.second);
-    console.log(`a: ${a}`);
-    console.log(`b: ${b}`);
+    let a = data.firstNeg ? (-1) * +(data.first) : +(data.first);
+    let b = data.secondNeg ? (-1) * +(data.second) : +(data.second);
     let result = data.operator(a,b);
     let isNeg = result < 0;
     if (isNeg) result *= -1;
-    return {neg: isNeg, val: "" + round(result, DECIMAL_PLACES)};
+    return {neg: isNeg, val: "" + roundTo(result, DECIMAL_PLACES)};
 }
 
 function roundTo(num, places) {
@@ -111,38 +109,38 @@ function evalOperand(number) {
             if (number === "0") return;
             data.first = number;
             data.currentState = states.FIRST_NONZERO;
-            // update display to data.first
+            updateDisplayTo("first");
             break;
         
         case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
             data.first += number;
-            //update display to data.first
+            updateDisplayTo('first');
             break;
         
         case states.OPERATOR:
             data.second = number;
             data.currentState = (number === "0") ?  states.SECOND_ZERO : states.SECOND_NONZERO;
-            // update display to data.second
+            updateDisplayTo('second');
             break;
         
         case states.SECOND_ZERO:
             if (number === "0") return;
             data.second = number;
             data.currentState = states.SECOND_NONZERO;
-            // update display to data.second
+            updateDisplayTo('second');
             break;
 
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
-            data.first += number;
-            //update display to data.second
+            data.second += number;
+            updateDisplayTo('second');
             break;
 
         case states.RESULT:
-            data.first = number;
+            data.second = number;
             data.currentState = (number === "0") ?  states.FIRST_ZERO : states.FIRST_NONZERO;
-            // update display to data.first
+            updateDisplayTo('first');
             break;
     }
 }
@@ -170,7 +168,7 @@ function evalOperator(operator) {
             data.second = "0"
             data.operator = operator;
             data.currentState = states.OPERATOR;
-            // update display to data.first
+            updateDisplayTo('first');
             // update operator btn to toggle on (not here?)
             break;
     }
@@ -228,19 +226,20 @@ function evalEquals() {
         case states.SECOND_NONZERO:
             data.currentState = states.RESULT;
             updateDataFromOperate("first");
+            updateDisplayTo('first');
             break;
 
         case states.OPERATOR:
             data.currentState = states.RESULT;
             copyFirstToSecond();
-            data.first = operateFromData();
+            updateDataFromOperate("first");
             // toggle off operator button ?
-            //update display to data.first
+            updateDisplayTo('first');
             break;
 
         case states.RESULT:
-            data.first = operateFromData();
-            //update display to data.first
+            updateDataFromOperate("first");
+            updateDisplayTo('first');
             break;
     }
 }
