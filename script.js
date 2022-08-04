@@ -1,4 +1,4 @@
-const DECIMAL_PLACES = 9;
+const DECIMAL_PLACES = 8;
 
 const operators = {
     add: (a, b) => a + b,
@@ -30,13 +30,28 @@ const data = {
 document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("click", handleInput))
 
 const display = document.querySelector("#display");
+const innerDisplay = document.querySelector("#inner-display");
 
 function updateDisplayTo(which) {
     if(which !== "first" && which !== "second") {
         console.log("INVALID INPUT");
         return;
     }
-    display.innerText = data[`${which}Neg`] ? "-" + data[which] : data[which];
+    innerDisplay.innerText = data[`${which}Neg`] ? "-" + data[which] : data[which]
+    scaleText();
+}
+
+function scaleText() {
+    let dispWidth = display.clientWidth - 16;
+    let innerWidth = innerDisplay.clientWidth;
+    console.log(`iw=${innerWidth}, dw=${dispWidth}`);
+    if(innerWidth > dispWidth - 16) {
+        let proportion = (innerDisplay.clientHeight / 1.15) / innerWidth;
+        console.log(proportion);
+        innerDisplay.style.fontSize = Math.floor(proportion * dispWidth) + "px";
+    } else {
+        innerDisplay.style.fontSize = "72px";
+    }
 }
 
 function updateDataFromOperate(which) {
@@ -114,6 +129,7 @@ function evalOperand(number) {
         
         case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
+            if(data.first.length > DECIMAL_PLACES) return;
             data.first += number;
             updateDisplayTo('first');
             break;
@@ -133,6 +149,7 @@ function evalOperand(number) {
 
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
+            if(data.first.length > DECIMAL_PLACES) return;
             data.second += number;
             updateDisplayTo('second');
             break;
