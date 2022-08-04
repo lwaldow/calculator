@@ -39,6 +39,21 @@ function updateDisplayTo(which) {
     display.innerText = data[`${which}Neg`] ? "-" + data[`${which}`] : data[`${which}`];
 }
 
+function updateDataFromOperate(which) {
+    let result = operateFromData();
+    data[`${which}Neg`] = result.neg;
+    data[which] = result.val;
+}
+
+function copyFirstToSecond() {
+    data.second = data.first;
+    data.secondNeg = data.firstNeg;
+}
+
+function negate(which) {
+    data[which] = !data[which];
+}
+
 function operateFromData() {
     let a = firstNeg ? (-1) * +(data.first) : +(data.first);
     let b = secondNeg ? (-1) * +(data.second) : +(data.second);
@@ -151,7 +166,7 @@ function evalOperator(operator) {
         case states.SECOND_ZERO:
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
-            data.first = operateFromData();
+            updateDataFromOperate("first");
             data.second = "0"
             data.operator = operator;
             data.currentState = states.OPERATOR;
@@ -212,13 +227,12 @@ function evalEquals() {
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
             data.currentState = states.RESULT;
-            data.first = operateFromData();
-            // update display to data.first
+            updateDataFromOperate("first");
             break;
 
         case states.OPERATOR:
             data.currentState = states.RESULT;
-            data.second = data.first;
+            copyFirstToSecond();
             data.first = operateFromData();
             // toggle off operator button ?
             //update display to data.first
