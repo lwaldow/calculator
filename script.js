@@ -279,11 +279,26 @@ function evalNegate() {
         case states.FIRST_ZERO:
         case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
+            data.firstNeg = !data.firstNeg;
+            updateDisplayTo("first");
+            break;
+
         case states.SECOND_ZERO:
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
+            data.secondNeg = !data.secondNeg;
+            updateDisplayTo("second");
+            break;
+
         case states.OPERATOR:
+            data.second = "0";
+            data.secondNeg = !data.secondNeg;
+            updateDisplayTo("second");
+            data.currentState = states.SECOND_ZERO;
+            break;
         case states.RESULT:
+            data.firstNeg = !data.firstNeg;
+            break;
     }
 }
 
