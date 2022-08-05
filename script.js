@@ -267,26 +267,26 @@ function evalDecimal() {
         case states.FIRST_NONZERO:
             data.currentState = states.FIRST_FLOAT;
             data.first += ".";
-            //update display to data.first
+            updateDisplayTo('first');
             break;
 
         case states.SECOND_ZERO:
         case states.SECOND_NONZERO:
             data.currentState = states.SECOND_FLOAT;
             data.second += ".";
-            //update display to data.second
+            updateDisplayTo("second");
             break;
 
         case states.OPERATOR:
             data.currentState = states.SECOND_FLOAT;
             data.second = "0.";
-            //update display to data.second
+            updateDisplayTo("second");
             break;
 
         case states.RESULT:
             data.currentState = states.FIRST_FLOAT;
             data.first = "0.";
-            //update display to data.first
+            updateDisplayTo("first");
             break;
 
         case states.FIRST_FLOAT:

@@ -92,13 +92,16 @@ button {
 
 .operator:hover {
     background-color: rgb(78, 211, 204);
-    transition:none;
 }
 
 .operator:active {
-    background-color: rgb(239, 250, 249);
+    background-color: rgb(78, 211, 204);
+    color: white;
+}
+
+.operator.highlight {
+    background-color: rgb(239,250,249);
     color: lightseagreen;
-    transition: none;
 }
 
 .wide {
