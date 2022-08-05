@@ -78,7 +78,6 @@ button {
 
 .operand:hover {
     background: rgb(115,115,125);
-    transition: none;
 }
 
 .operand:active {

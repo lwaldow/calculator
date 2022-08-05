@@ -38,6 +38,7 @@ document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("cl
 
 const display = document.querySelector("#display");
 const innerDisplay = document.querySelector("#inner-display");
+const clearButton = document.querySelector('[data-input="clear"]');
 
 function updateDisplayTo(which) {
     if(which !== "first" && which !== "second") {
@@ -95,6 +96,38 @@ function removeOperatorHighlight() {
     }
 }
 
+function allClear() {
+    data.currentState = states.FIRST_ZERO;
+    data.firstNeg = false;
+    data.first = "0";
+    data.operator = undefined;
+    data.secondNeg = false;
+    data.second = "0";
+    updateDisplayTo("first");
+}
+
+function clearToFirst() {
+    data.currentState = states.FIRST_ZERO;
+    data.firstNeg = false;
+    data.first = "0";
+    updateDisplayTo("first");
+}
+
+function clearToSecond() {
+    data.currentState = states.SECOND_ZERO;
+    data.secondNeg = false;
+    data.second = "0";
+    updateDisplayTo("second");
+}
+
+function setTextToAC() {
+    clearButton.innerText = "AC";
+}
+
+function setTextToC() {
+    clearButton.innerText = "C";
+}
+
 function handleInput(event) {
     let input = event.target.dataset.input;
     switch(input) {
@@ -139,6 +172,7 @@ function evalOperand(number) {
             if (number === "0") return;
             data.first = number;
             data.currentState = states.FIRST_NONZERO;
+            setTextToC();
             updateDisplayTo("first");
             break;
         
@@ -151,7 +185,14 @@ function evalOperand(number) {
         
         case states.OPERATOR:
             data.second = number;
-            data.currentState = (number === "0") ?  states.SECOND_ZERO : states.SECOND_NONZERO;
+            if(number === "0") {
+                data.currentState = states.SECOND_ZERO;
+                setTextToAC();
+            }
+            else {
+                data.currentState = states.SECOND_NONZERO;
+                setTextToC();
+            }
             updateDisplayTo('second');
             break;
         
@@ -159,6 +200,7 @@ function evalOperand(number) {
             if (number === "0") return;
             data.second = number;
             data.currentState = states.SECOND_NONZERO;
+            setTextToC();
             updateDisplayTo('second');
             break;
 
@@ -185,7 +227,7 @@ function evalOperator(operator) {
         case states.FIRST_NONZERO:
             data.operator = operator;
             data.currentState = states.OPERATOR;
-            // update operator button to toggle on (maybe do this purely based on clicks and not logically)
+            setTextToAC();
             break;
         
         case states.OPERATOR:
@@ -201,7 +243,7 @@ function evalOperator(operator) {
             data.operator = operator;
             data.currentState = states.OPERATOR;
             updateDisplayTo('first');
-            // update operator btn to toggle on (not here?)
+            setTextToAC();
             break;
     }
 }
@@ -209,13 +251,26 @@ function evalOperator(operator) {
 function evalClear() {
     switch(data.currentState) {
         case states.FIRST_ZERO:
+            allClear();
+            break;
+
         case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
+        case states.RESULT:
+            clearToFirst();
+            setTextToAC();
+            break;
+        
         case states.SECOND_ZERO:
+            allClear();
+            break;
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
+            clearToSecond();
+            setTextToAC();
+            break;
         case states.OPERATOR:
-        case states.RESULT:
+            allClear();
     }
 }
 
