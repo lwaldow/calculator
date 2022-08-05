@@ -206,7 +206,7 @@ function evalOperand(number) {
 
         case states.SECOND_FLOAT:
         case states.SECOND_NONZERO:
-            if(data.first.length > DECIMAL_PLACES) return;
+            if(data.second.length > DECIMAL_PLACES) return;
             data.second += number;
             updateDisplayTo('second');
             break;
