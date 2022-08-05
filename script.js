@@ -27,6 +27,13 @@ const data = {
     second: "0"
 }
 
+const operatorElems = {
+    add: document.querySelector('[data-input="add"]'),
+    subtract: document.querySelector('[data-input="subtract"]'),
+    multiply: document.querySelector('[data-input="multiply"]'),
+    divide: document.querySelector('[data-input="divide"]')
+}
+
 document.querySelectorAll(".button").forEach((elem) => elem.addEventListener("click", handleInput))
 
 const display = document.querySelector("#display");
@@ -82,26 +89,32 @@ function roundTo(num, places) {
     return Math.round(num * Math.pow(10, places)) / Math.pow(10, places);
 }
 
+function removeOperatorHighlight() {
+    for (let op in operatorElems) {
+        operatorElems[op].classList.remove("highlight");
+    }
+}
+
 function handleInput(event) {
     let input = event.target.dataset.input;
     switch(input) {
         case "number":
             evalOperand(event.target.innerText);
+            removeOperatorHighlight();
             break;
+
         case "add":
-            evalOperator(operators.add);
-            break;
         case "subtract":
-            evalOperator(operators.subtract);
-            break;
         case "divide":
-            evalOperator(operators.divide);
-            break;
         case "multiply":
-            evalOperator(operators.multiply);
+            evalOperator(operators[input]);
+            removeOperatorHighlight();
+            operatorElems[input].classList.add("highlight");
             break;
+
         case "clear":
             evalClear();
+            removeOperatorHighlight();
             break;
         case "negate":
             evalNegate();
@@ -111,9 +124,11 @@ function handleInput(event) {
             break;
         case "equals":
             evalEquals();
+            removeOperatorHighlight();
             break;
         case "decimal":
             evalDecimal();
+            removeOperatorHighlight();
             break;
     }
 }
