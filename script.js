@@ -298,6 +298,7 @@ function evalNegate() {
             break;
         case states.RESULT:
             data.firstNeg = !data.firstNeg;
+            updateDisplayTo("first");``
             break;
     }
 }
