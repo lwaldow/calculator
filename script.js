@@ -63,7 +63,7 @@ function scaleText() {
 }
 
 function updateDataFromOperate(which) {
-    let result = operateFromData();
+    let result = operateFrom(data);
     data[`${which}Neg`] = result.neg;
     data[which] = result.val;
 }
@@ -77,7 +77,7 @@ function negate(which) {
     data[which] = !data[which];
 }
 
-function operateFromData() {
+function operateFrom(data) {
     let a = data.firstNeg ? (-1) * +(data.first) : +(data.first);
     let b = data.secondNeg ? (-1) * +(data.second) : +(data.second);
     let result = data.operator(a,b);
@@ -232,7 +232,6 @@ function evalOperator(operator) {
         
         case states.OPERATOR:
             data.operator = operator;
-            //update prev operator button toggled off, new operator btn toggled on (not here?)
             break;
 
         case states.SECOND_ZERO:
@@ -306,13 +305,39 @@ function evalNegate() {
 function evalPercent() {
     switch(data.currentState) {
         case states.FIRST_ZERO:
+            return;
+
         case states.FIRST_FLOAT:
         case states.FIRST_NONZERO:
+        case states.RESULT: {
+            let result = operateFrom({
+                firstNeg: data.firstNeg, first: data.first, 
+                operator: operators.divide, 
+                secondNeg: false, second: "10"});
+            data.firstNeg = result.neg;
+            data.first = result.val;
+            updateDisplayTo("first");
+            }
+            break;
+
+        
+        case states.OPERATOR:
+            copyFirstToSecond();
+            data.currentState = states.SECOND_ZERO;
+            //continue
         case states.SECOND_ZERO:
         case states.SECOND_FLOAT:
-        case states.SECOND_NONZERO:
-        case states.OPERATOR:
-        case states.RESULT:
+        case states.SECOND_NONZERO: {
+            let result = operateFrom({
+                firstNeg: data.firstNeg, first: data.first,
+                operator: operators.multiply,
+                secondNeg: data.secondNeg, second: '' + (+(data.second) / 100)
+            })
+            data.secondNeg = result.neg;
+            data.second = result.val;
+            updateDisplayTo("second");
+            }
+            break;
     }
 }
 
